@@ -1,3 +1,4 @@
+  
 version: "2"
 
 services:
@@ -5,23 +6,18 @@ services:
     image: mysql/mysql-server:5.7
     container_name: "MYSQL"
     hostname: mysql
-    restart: always
-    networks:
-      whmcs:
-        ipv4_address: 172.18.18.2
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "mysqrootpass"
       MYSQL_ROOT_HOST: '%'
     ports:
       - 3306:3306
+    
 
   whmcs:
-    image: fauzie/docker-whmcs:latest
+    image: docker-whmcs
     container_name: "WHMCS"
     hostname: whmcs
-    networks:
-      whmcs:
-        ipv4_address: 172.18.18.3
     restart: always
     depends_on:
       - mysql
@@ -35,12 +31,5 @@ services:
       - 80:80
       - 2222:2222
     volumes:
-      - /your/path/to/whmcs:/var/www/whmcs
+      - /var/www/whmcs:/var/www/whmcs
 
-networks:
-  whmcs:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.18.0/29
-          gateway: 172.18.18.1
