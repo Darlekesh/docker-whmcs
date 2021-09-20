@@ -7,13 +7,13 @@ ENV     PHP_VERSION=7.3 \
         HOME=/var/www/whmcs \
         PUID=1000 \
         PGID=1000 \
-        TZ=Asia/Jakarta \
+        TZ=Europe/Prague \
         WHMCS_SERVER_IP=172.17.0.1 \
         REAL_IP_FROM=172.17.0.0/16 \
         SSH_PORT=2222
 
 COPY    build /build
-
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && build/setup.sh && rm -rf /build
 
 COPY    root/ /
