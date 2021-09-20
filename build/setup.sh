@@ -13,6 +13,7 @@ set -eo pipefail
 apt-get -y update
 
 # Install nginx and PHP
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 apt install -y php
 echo
 echo
