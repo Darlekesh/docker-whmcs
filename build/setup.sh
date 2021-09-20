@@ -14,6 +14,13 @@ apt-get -y update
 
 # Install nginx and PHP
 apt install -y php
+echo
+echo
+echo
+php --version
+echo
+echo
+echo
 apt-get -y install nginx php$PHP_VERSION-fpm php$PHP_VERSION-mysql php$PHP_VERSION-common \
 	php-imagick php-igbinary php-redis php$PHP_VERSION-bcmath php$PHP_VERSION-opcache \
 	php$PHP_VERSION-enchant php$PHP_VERSION-gd php$PHP_VERSION-imap php$PHP_VERSION-intl \
