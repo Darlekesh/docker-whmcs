@@ -13,6 +13,7 @@ ENV     PHP_VERSION=7.3 \
         SSH_PORT=2222
 
 COPY    build /build
+RUN apt update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && build/setup.sh && rm -rf /build
 
