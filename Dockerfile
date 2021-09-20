@@ -2,7 +2,7 @@ FROM    ubuntu
 
 LABEL	maintainer="Rizal Fauzie Ridwan <rizal@fauzie.my.id>"
 
-ENV     PHP_VERSION=7.3 \
+ENV     PHP_VERSION=7.4 \
         VIRTUAL_HOST=$DOCKER_HOST \
         HOME=/var/www/whmcs \
         PUID=1000 \
