@@ -13,8 +13,10 @@ ENV     PHP_VERSION=7.4 \
         SSH_PORT=2222
 
 COPY    build /build
+RUN     chmod +x /build/setup.sh
+RUN     ls -l /build
 
-RUN     build/setup.sh && rm -rf /build
+RUN     /build/setup.sh && rm -rf /build
 
 COPY    root/ /
 

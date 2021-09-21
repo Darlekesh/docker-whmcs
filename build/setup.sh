@@ -22,7 +22,7 @@ php --version
 echo
 echo
 echo
-apt-get -y install nginx php$PHP_VERSION-fpm php$PHP_VERSION-mysql php$PHP_VERSION-common \
+apt-get -y install curl tar nginx php$PHP_VERSION-fpm php$PHP_VERSION-mysql php$PHP_VERSION-common \
 	php-imagick php-igbinary php-redis php$PHP_VERSION-bcmath php$PHP_VERSION-opcache \
 	php$PHP_VERSION-enchant php$PHP_VERSION-gd php$PHP_VERSION-imap php$PHP_VERSION-intl \
 	php$PHP_VERSION-json php$PHP_VERSION-xml php$PHP_VERSION-xmlrpc php-pear \
@@ -30,11 +30,12 @@ apt-get -y install nginx php$PHP_VERSION-fpm php$PHP_VERSION-mysql php$PHP_VERSI
     htop nano net-tools zip unzip openssh-server
 
 mkdir -p /var/www
+adduser --disabled-password --gecos "" app
 chown -R app:app /var/www
 mkdir -p /var/www/.ssh
 ln -sf /dev/stdout /var/log/nginx/access.log
 ln -sf /dev/stderr /var/log/nginx/error.log
-rm /etc/nginx/conf.d/*
+rm /etc/nginx/conf.d/* -rf
 
 # Change max execution time to 180 seconds
 sed -ri 's/(max_execution_time =) ([2-9]+)/\1 180/' /etc/php/$PHP_VERSION/fpm/php.ini
@@ -46,17 +47,28 @@ sed -ri 's/(memory_limit =) ([0-9]+)/\1 1024/' /etc/php/$PHP_VERSION/fpm/php.ini
 sed -ri "s@^;date\.timezone\s+.*@date\.timezone=${TZ}@" /etc/php/$PHP_VERSION/fpm/php.ini
 
 # Install ioncube loader
-cd /tmp && curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz && \
-    tar -xzvf ioncube.tar.gz && \
+cd /tmp && curl -o ioncube.zip http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.zip && \
+    echo "Step 1" && \
+    unzip ioncube.zip && \
+    echo "Step 2" && \
+    rm ioncube.zip && \
+    echo "Step 3" && \
     mkdir -p /usr/lib/php/ioncube && \
+    echo "Step 4" && \
     cp /tmp/ioncube/ioncube_loader_lin_$PHP_VERSION.so /usr/lib/php/ioncube/. && \
+    echo "Step 5" && \
     echo "zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_${PHP_VERSION}.so" \
     > /etc/php/${PHP_VERSION}/fpm/conf.d/00-ioncube.ini && \
-    cp /etc/php/${PHP_VERSION}/fpm/conf.d/00-ioncube.ini /etc/php/${PHP_VERSION}/cli/conf.d/.
+    echo "Step 6" && \
+    cp /etc/php/${PHP_VERSION}/fpm/conf.d/00-ioncube.ini /etc/php/${PHP_VERSION}/cli/conf.d/. && \
+    echo "Step 7"
 
 # Install Dockerize
-wget -qO - https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
-	| tar zxf - -C /usr/local/bin
+DOCKERIZE_VERSION="v0.6.1"
+wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Cleanup
-/usr/local/sbin/cleanup.sh
+chmod +x /build/cleanup.sh
+/build/cleanup.sh
