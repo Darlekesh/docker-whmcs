@@ -1,4 +1,4 @@
-FROM    phusion/baseimage
+FROM    ghcr.io/phusion/baseimage:master
 
 LABEL	maintainer="Rizal Fauzie Ridwan <rizal@fauzie.my.id>"
 
