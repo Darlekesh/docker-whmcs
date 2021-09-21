@@ -46,5 +46,5 @@ if [[ $COUNT -eq 0 ]] && [[ $GENERATE_DEFAULT_VHOST != "false" ]]
 fi
 
 # Make sure the app user is able to write to nginx directories
-mkdir -p /var/www/logs
+mkdir -p /var/www/logs /var/cache/nginx
 chown -R app:app /var/log/nginx /var/cache/nginx /var/www/logs

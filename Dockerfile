@@ -23,5 +23,5 @@ RUN     chmod -v +x /etc/my_init.d/*.sh /etc/service/*/run
 
 EXPOSE  2222
 
-VOLUME  [/var/www/whmcs]
+VOLUME  /var/www/whmcs
 WORKDIR /var/www/whmcs
